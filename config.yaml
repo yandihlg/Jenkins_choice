@@ -2,11 +2,11 @@ config:
   entornos:
     aro-dev:
       - sa_token_credential: "LOGICALIS-AUTOMATION-ARO-DEV-SERVICE-ACCOUNT"
-      - cluster_api: "https://api.gc1s38k4.westeurope.aroapp.io:6443"
+      - cluster_api: "https://api.westeurope.aroapp.io:6443"
       - git_branch: "dev"
       - git_path: "/deploy/dev/"
     aro-prod:
       - sa_token_credential: "LOGICALIS-AUTOMATION-ARO-PROD-SERVICE-ACCOUNT"
-      - cluster_api: "https://api.gc1s38k4.westeurope.aroapp.io:6443"
+      - cluster_api: "https://api.westeurope.aroapp.io:6443"
       - git_branch: "main"
       - git_path: "/platform/aro-prd/"
