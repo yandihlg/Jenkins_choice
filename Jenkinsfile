@@ -1,17 +1,36 @@
 node {
   checkout scm
-  // Requiere el plugin Pipeline Utility Steps
-  def cfg = readYaml file: 'config.yaml'
-  def choicesList = (cfg.opciones as List).join('\n')
+
+  if (!fileExists('config.yaml')) {
+    error "No encuentro config.yaml en el workspace"
+  }
+
+  // Lee el YAML (usa text para evitar sorpresas de ruta)
+  def cfg = readYaml text: readFile('config.yaml')
+
+  // Normaliza a lista independiente de la forma del YAML
+  List opts = []
+  if (cfg instanceof Map && cfg.containsKey('opciones')) {
+    opts = (cfg.opciones ?: []) as List
+  } else if (cfg instanceof List) {
+    opts = cfg as List
+  } else {
+    error "config.yaml debe ser una lista o un mapa con la clave 'opciones'"
+  }
+
+  // Limpieza y validación
+  opts = opts.collect { it?.toString()?.trim() }.findAll { it }
+  if (opts.isEmpty()) {
+    error "La lista de opciones está vacía en config.yaml"
+  }
 
   properties([
     parameters([
-      choice(name: 'ENTORNO', choices: choicesList, description: 'Desde YAML')
+      choice(name: 'ENTORNO', choices: opts.join('\n'), description: 'Desde YAML')
     ])
   ])
 
-  echo "Parámetros actualizados desde YAML. Vuelve a lanzar el job y ya podrás elegir ENTORNO."
-  // Opcionalmente, termina aquí para evitar usar params vacíos en este primer run:
+  echo "Parámetros actualizados desde YAML. Vuelve a lanzar el job y verás ENTORNO."
   currentBuild.result = 'SUCCESS'
   return
 }
