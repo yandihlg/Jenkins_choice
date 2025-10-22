@@ -10,7 +10,7 @@ node {
 
   // Normaliza a lista independiente de la forma del YAML
   List opts = []
-  if (cfg instanceof Map && cfg.containsKey('opciones')) {
+  if (cfg instanceof Map && cfg.containsKey('config.entornos')) {
     opts = (cfg.opciones ?: []) as List
   } else if (cfg instanceof List) {
     opts = cfg as List
@@ -26,7 +26,8 @@ node {
 
   properties([
     parameters([
-      choice(name: 'ENTORNO', choices: opts.join('\n'), description: 'Desde YAML')
+        string(name: 'Usuarios', defaultValue: '', description: 'Entre la lista de usuarios separados por comas ejemplo: user1,user2,user3'),
+        choice(name: 'ENTORNO', choices: opts.join('\n'), description: 'Desde YAML')
     ])
   ])
 
