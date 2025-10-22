@@ -14,4 +14,5 @@ node {
         sh echo "echo 'Has elegido el entorno: ${params.ENTORNO}'"
       }
     }
+  }
 }
